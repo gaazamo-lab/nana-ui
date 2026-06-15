@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLET Information Security Awareness Training</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1B2A4A;--navy2:#253660;--navy3:#0f1c33;
+  --gold:#C9A227;--goldf:#FDF6E3;
+  --white:#ffffff;--offwhite:#F4F5F8;
+  --muted:#5A6480;--hint:#8892AA;--border:#DDE2EE;
+  --ok-bg:#E1F5EE;--ok-tx:#085041;--ok-bd:#5DCAA5;
+  --wa-bg:#FAEEDA;--wa-tx:#633806;--wa-bd:#EF9F27;
+  --er-bg:#FCEBEB;--er-tx:#791F1F;--er-bd:#E24B4A;
+  --blu-bg:#E6F1FB;--blu-tx:#0C447C;--blu-bd:#378ADD;
+  --pur-bg:#EEEDFE;--pur-tx:#26215C;--pur-bd:#534AB7;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:system-ui,-apple-system,sans-serif}
+.stage{width:100vw;height:100vh;display:flex;flex-direction:column;background:var(--navy3)}
+.slide{display:none;flex:1;flex-direction:column;overflow:hidden}
+.slide.active{display:flex}
+
+/* NAV */
+.topbar{background:var(--navy);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.tb-brand{display:flex;align-items:center;gap:12px}
+.tb-logo{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gold);background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb-logo img{width:36px;height:36px;object-fit:contain}
+.tb-org{font-size:10px;font-weight:600;letter-spacing:1.8px;color:var(--gold);text-transform:uppercase}
+.tb-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px}
+.tb-right{display:flex;align-items:center;gap:12px}
+.slide-ctr{font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:0.5px;min-width:48px;text-align:right}
+.nbtn{width:36px;height:36px;border-radius:50%;border:0.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;font-size:16px}
+.nbtn:hover{background:rgba(255,255,255,0.14)}
+.nbtn:disabled{opacity:0.2;cursor:default}
+
+/* DOTS */
+.dotbar{background:var(--navy);padding:6px 28px 10px;display:flex;gap:6px;align-items:center;flex-shrink:0}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:all 0.2s}
+.dot.active{background:var(--gold);width:24px;border-radius:99px}
+.dot:hover:not(.active){background:rgba(255,255,255,0.4)}
+
+/* SLIDE BODY */
+.sbody{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* HERO */
+.hero .sbody{background:var(--navy);padding:clamp(24px,3.5vh,48px) clamp(32px,4vw,64px);justify-content:center;position:relative;overflow:hidden}
+.hero-deco{position:absolute;top:10%;right:4%;width:min(240px,28vw);height:min(240px,28vw);border-radius:50%;border:1.5px solid rgba(201,162,39,0.08);pointer-events:none}
+.hero-deco2{position:absolute;top:calc(10% + min(60px,7vw));right:calc(4% + min(60px,7vw));width:min(140px,16vw);height:min(140px,16vw);border-radius:50%;border:1.5px solid rgba(201,162,39,0.05);pointer-events:none}
+.hero-top{display:flex;align-items:center;gap:clamp(16px,2vw,28px);margin-bottom:clamp(16px,2.5vh,28px)}
+.hero-logobox{width:clamp(64px,7vw,96px);height:clamp(64px,7vw,96px);border-radius:50%;border:2px solid var(--gold);background:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-logobox img{width:88%;height:88%;object-fit:contain}
+.hero-eyebrow{font-size:clamp(10px,1vw,12px);font-weight:600;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-size:clamp(20px,2.8vw,38px);font-weight:500;color:#fff;line-height:1.25;margin-bottom:6px}
+.hero-sub{font-size:clamp(12px,1.3vw,16px);color:var(--gold);font-weight:500}
+.hero-rule{width:44px;height:3px;background:var(--gold);border-radius:99px;margin:clamp(12px,1.8vh,20px) 0}
+.hero-meta{font-size:clamp(11px,1vw,13px);color:rgba(255,255,255,0.4);line-height:1.8}
+.hero-chips{display:flex;gap:8px;margin-top:clamp(12px,1.8vh,20px);flex-wrap:wrap}
+.chip{font-size:clamp(10px,0.9vw,12px);padding:4px 12px;border-radius:99px;border:0.5px solid rgba(201,162,39,0.3);color:var(--gold);display:flex;align-items:center;gap:5px}
+
+/* CONTENT SLIDES */
+.content .sbody{background:var(--offwhite);padding:clamp(18px,2.5vh,32px) clamp(28px,3.5vw,52px)}
+.s-eye{font-size:clamp(9px,0.8vw,10px);font-weight:600;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.s-title{font-size:clamp(16px,2vw,24px);font-weight:500;color:var(--navy);line-height:1.3;margin-bottom:4px}
+.s-rule{height:3px;width:36px;background:var(--gold);border-radius:99px;margin-bottom:clamp(12px,1.8vh,20px)}
+.s-text{font-size:clamp(11px,1vw,13px);color:var(--muted);line-height:1.65}
+
+.callout{border-radius:10px;padding:12px 15px;margin-bottom:12px;border-left:3px solid}
+.callout.gold{background:var(--goldf);border-color:var(--gold)}
+.callout.green{background:var(--ok-bg);border-color:var(--ok-bd)}
+.c-lbl{font-size:clamp(9px,0.8vw,10px);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.callout.gold .c-lbl{color:#7a5c00}
+.callout.green .c-lbl{color:var(--ok-tx)}
+.c-body{font-size:clamp(11px,1vw,12px);line-height:1.65}
+.callout.gold .c-body{color:#5a3d00}
+.callout.green .c-body{color:var(--ok-tx)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.icard{background:#fff;border:0.5px solid var(--border);border-radius:10px;padding:12px 14px}
+.ic-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.icn{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.icn.nv{background:var(--navy);color:var(--gold)}
+.icn.gd{background:var(--goldf);color:#a07b10}
+.icn.gn{background:var(--ok-bg);color:var(--ok-tx)}
+.icn.bl{background:var(--blu-bg);color:var(--blu-tx)}
+.ic-t{font-size:clamp(11px,1vw,12px);font-weight:500;color:var(--navy)}
+.ic-b{font-size:clamp(10px,0.9vw,11px);color:var(--muted);line-height:1.6}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.sbox{background:#fff;border:0.5px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center}
+.sn{font-size:clamp(20px,2.2vw,30px);font-weight:500;color:var(--navy)}
+.sl{font-size:clamp(10px,0.85vw,11px);color:var(--hint);margin-top:3px;line-height:1.35}
+
+.mlist{display:flex;flex-direction:column;gap:6px}
+.mi{display:flex;align-items:flex-start;gap:10px;background:#fff;border:0.5px solid var(--border);border-radius:10px;padding:9px 12px;cursor:pointer;transition:border-color 0.15s,background 0.15s}
+.mi:hover{border-color:var(--gold);background:var(--goldf)}
+.mi.open{border-color:var(--gold);background:var(--goldf)}
+.mi.open .mnum{background:var(--gold);color:var(--navy)}
+.mnum{width:22px;height:22px;border-radius:50%;background:var(--navy);color:var(--gold);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.mn2{font-size:clamp(11px,1vw,12px);font-weight:500;color:var(--navy);line-height:1.3}
+.mfocus{font-size:clamp(10px,0.85vw,11px);color:var(--hint);margin-top:1px}
+.mdesc{font-size:clamp(10px,0.85vw,11px);color:var(--muted);margin-top:4px;line-height:1.5;display:none}
+.mi.open .mdesc{display:block}
+.mchev{margin-left:auto;font-size:13px;color:var(--hint);flex-shrink:0;transition:transform 0.2s}
+.mi.open .mchev{transform:rotate(180deg)}
+
+.tgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+.tc{border-radius:9px;padding:10px 12px;border:0.5px solid}
+.tc.red{background:var(--er-bg);border-color:var(--er-bd)}
+.tc.wa{background:var(--wa-bg);border-color:var(--wa-bd)}
+.tc.pur{background:var(--pur-bg);border-color:var(--pur-bd)}
+.tc.bl2{background:var(--blu-bg);border-color:var(--blu-bd)}
+.tc.gn2{background:var(--ok-bg);border-color:var(--ok-bd)}
+.tn{font-size:clamp(9px,0.8vw,10px);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:3px}
+.td{font-size:clamp(10px,0.9vw,11px);line-height:1.5}
+.tc.red .tn,.tc.red .td{color:var(--er-tx)}
+.tc.wa .tn,.tc.wa .td{color:var(--wa-tx)}
+.tc.pur .tn,.tc.pur .td{color:var(--pur-tx)}
+.tc.bl2 .tn,.tc.bl2 .td{color:var(--blu-tx)}
+.tc.gn2 .tn,.tc.gn2 .td{color:var(--ok-tx)}
+
+.scol{display:flex;flex-direction:column;gap:8px}
+.si{display:flex;align-items:flex-start;gap:10px;background:#fff;border:0.5px solid var(--border);border-radius:10px;padding:10px 12px}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.snum.bl{background:var(--blu-bg);color:var(--blu-tx)}
+.snum.gd{background:var(--goldf);color:#7a5c00}
+.snum.gn{background:var(--ok-bg);color:var(--ok-tx)}
+.snum.rd{background:var(--er-bg);color:var(--er-tx)}
+.st{font-size:clamp(11px,1vw,12px);font-weight:500;color:var(--navy);margin-bottom:2px}
+.sd{font-size:clamp(10px,0.9vw,11px);color:var(--muted);line-height:1.55}
+
+.explist{display:flex;flex-direction:column;gap:7px}
+.ei{display:flex;align-items:flex-start;gap:10px;background:#fff;border:0.5px solid var(--border);border-radius:10px;padding:10px 12px}
+.edot{width:22px;height:22px;border-radius:50%;background:var(--navy);color:var(--gold);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.etx{font-size:clamp(11px,1vw,12px);color:var(--navy);line-height:1.6}
+
+/* CLOSER */
+.closer .sbody{background:var(--navy);padding:clamp(24px,3.5vh,48px) clamp(32px,4vw,64px);justify-content:center;align-items:center;text-align:center}
+.cl-logo{width:clamp(56px,6vw,80px);height:clamp(56px,6vw,80px);border-radius:50%;border:2px solid var(--gold);background:#000;display:flex;align-items:center;justify-content:center;margin:0 auto clamp(12px,1.5vh,18px)}
+.cl-logo img{width:88%;height:88%;object-fit:contain}
+.cl-title{font-size:clamp(18px,2.2vw,28px);font-weight:500;color:#fff;margin-bottom:4px}
+.cl-rule{width:38px;height:3px;background:var(--gold);border-radius:99px;margin:clamp(8px,1.2vh,14px) auto}
+.cl-box{background:rgba(201,162,39,0.1);border:0.5px solid rgba(201,162,39,0.3);border-radius:10px;padding:clamp(14px,2vh,20px) clamp(18px,2.5vw,28px);max-width:min(560px,70vw);margin:0 auto clamp(14px,2vh,22px);text-align:left}
+.cl-lbl{font-size:clamp(9px,0.8vw,10px);font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.cl-body{font-size:clamp(11px,1.1vw,13px);color:rgba(255,255,255,0.75);line-height:1.75}
+.cl-meta{font-size:clamp(10px,0.85vw,11px);color:rgba(255,255,255,0.28);letter-spacing:0.3px}
+
+/* BOTTOM BAR */
+.bbar{background:var(--navy);border-top:0.5px solid rgba(255,255,255,0.07);padding:7px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.bb-l{font-size:clamp(9px,0.8vw,11px);color:rgba(255,255,255,0.3);letter-spacing:0.3px}
+.bb-b{font-size:clamp(9px,0.8vw,10px);padding:3px 10px;border-radius:99px;background:rgba(201,162,39,0.12);color:var(--gold);border:0.5px solid rgba(201,162,39,0.25)}
+.adinkra{height:4px;background:var(--gold);opacity:0.75;flex-shrink:0}
+
+/* keyboard hint */
+.kbd-hint{position:absolute;bottom:clamp(50px,7vh,80px);right:clamp(20px,2.5vw,36px);font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.5px;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+<!-- NAV -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo"><img src="data:image/png;base64,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" alt="CLET"></div>
+    <div>
+      <div class="tb-org">Council for Legal Education &amp; Training</div>
+      <div class="tb-sub">Staff briefing communique &mdash; June 2025</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="slide-ctr" id="ctr">1 / 8</span>
+    <button class="nbtn" id="pb" onclick="go(-1)" disabled aria-label="Previous"><i class="ti ti-arrow-left"></i></button>
+    <button class="nbtn" id="nb" onclick="go(1)" aria-label="Next"><i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+<div class="dotbar">
+  <div class="dot active" onclick="gs(0)" id="d0"></div>
+  <div class="dot" onclick="gs(1)" id="d1"></div>
+  <div class="dot" onclick="gs(2)" id="d2"></div>
+  <div class="dot" onclick="gs(3)" id="d3"></div>
+  <div class="dot" onclick="gs(4)" id="d4"></div>
+  <div class="dot" onclick="gs(5)" id="d5"></div>
+  <div class="dot" onclick="gs(6)" id="d6"></div>
+  <div class="dot" onclick="gs(7)" id="d7"></div>
+</div>
+
+<!-- SLIDE 1: HERO -->
+<div class="slide hero active" id="s0">
+  <div class="hero-deco"></div><div class="hero-deco2"></div>
+  <div class="sbody">
+    <div class="hero-top">
+      <div class="hero-logobox"><img src="data:image/png;base64,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" alt="CLET seal"></div>
+      <div>
+        <div class="hero-eyebrow">Internal staff communique</div>
+        <div class="hero-title">Information Security<br>Awareness Training</div>
+        <div class="hero-sub">What's coming, why it matters, and what we need from you</div>
+      </div>
+    </div>
+    <div class="hero-rule"></div>
+    <div class="hero-meta">June 2025 &nbsp;&bull;&nbsp; All CLET Staff &nbsp;&bull;&nbsp; Strictly Internal</div>
+    <div class="hero-chips">
+      <div class="chip"><i class="ti ti-layout-list"></i>7 modules</div>
+      <div class="chip"><i class="ti ti-clock"></i>~15 mins each</div>
+      <div class="chip"><i class="ti ti-certificate"></i>Certificate on completion</div>
+      <div class="chip"><i class="ti ti-users"></i>All staff required</div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">Use arrow keys or click the dots to navigate</span><span class="bb-b">Slide 1 of 8</span></div>
+  <div class="adinkra"></div>
+  <div class="kbd-hint">&#8592; &#8594; arrow keys</div>
+</div>
+
+<!-- SLIDE 2: WHY -->
+<div class="slide content" id="s1">
+  <div class="sbody">
+    <div class="s-eye">Why this training</div>
+    <div class="s-title">Why this matters right now</div>
+    <div class="s-rule"></div>
+    <div class="callout gold">
+      <div class="c-lbl">The current risk landscape</div>
+      <div class="c-body">Our recent public announcement has placed every member of staff in a potential information-sharing scenario. Journalists, researchers, competitors and bad actors all use the same window of opportunity. One piece of information shared with the wrong person at the wrong time can cause irreversible harm to the organisation, to individuals and to ongoing legal proceedings.</div>
+    </div>
+    <div class="two-col">
+      <div class="icard"><div class="ic-head"><div class="icn nv"><i class="ti ti-target"></i></div><div class="ic-t">Who is at risk</div></div><div class="ic-b">Every member of staff regardless of role. Admin, comms, developers, helpdesk, infrastructure and legal teams all handle information that has value to outside parties.</div></div>
+      <div class="icard"><div class="ic-head"><div class="icn gd"><i class="ti ti-shield"></i></div><div class="ic-t">Our strongest protection</div></div><div class="ic-b">A well-informed team. This training is not about creating fear. It is about giving you clear, practical tools so every interaction is handled with confidence.</div></div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">CLET Information Security Awareness Training</span><span class="bb-b">Slide 2 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 3: HOW IT WORKS -->
+<div class="slide content" id="s2">
+  <div class="sbody">
+    <div class="s-eye">Training overview</div>
+    <div class="s-title">How the training works</div>
+    <div class="s-rule"></div>
+    <div class="stat-row">
+      <div class="sbox"><div class="sn">7</div><div class="sl">Training modules</div></div>
+      <div class="sbox"><div class="sn">1</div><div class="sl">Final assessment</div></div>
+      <div class="sbox"><div class="sn">~2h</div><div class="sl">Total time</div></div>
+      <div class="sbox"><div class="sn">3/5</div><div class="sl">Pass threshold</div></div>
+    </div>
+    <div class="two-col">
+      <div class="icard"><div class="ic-head"><div class="icn gn"><i class="ti ti-player-play"></i></div><div class="ic-t">Each module follows the same structure</div></div><div class="ic-b">Real-world scenario, core knowledge, interactive activity, knowledge check quiz. All four must be completed before the next module unlocks.</div></div>
+      <div class="icard"><div class="ic-head"><div class="icn bl"><i class="ti ti-award"></i></div><div class="ic-t">Completion and certification</div></div><div class="ic-b">A certificate is issued on passing the final assessment. This will be recorded in your staff training file. Managers confirm completion within their teams.</div></div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">CLET Information Security Awareness Training</span><span class="bb-b">Slide 3 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 4: ALL MODULES -->
+<div class="slide content" id="s3">
+  <div class="sbody" style="overflow-y:auto">
+    <div class="s-eye">Module breakdown</div>
+    <div class="s-title">All seven modules at a glance</div>
+    <div class="s-rule"></div>
+    <div class="mlist">
+      <div class="mi" onclick="tm(this)"><div class="mnum">1</div><div style="flex:1;min-width:0"><div class="mn2">Know your information</div><div class="mfocus">Classification and sensitivity</div><div class="mdesc">The four tiers of information at CLET: public, internal, confidential and restricted. What each tier means for what you can say, share, store and print.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">2</div><div style="flex:1;min-width:0"><div class="mn2">Who's asking?</div><div class="mfocus">Verification and identity</div><div class="mdesc">A four-step framework for verifying who is making any request before you respond. Covers phone calls, emails, in-person visitors and requests from unfamiliar internal colleagues.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">3</div><div style="flex:1;min-width:0"><div class="mn2">The manipulation playbook</div><div class="mfocus">Social engineering tactics</div><div class="mdesc">The six core tactics used by social engineers: urgency, authority, social proof, flattery, fear and reciprocity. How they are combined and one universal response for all of them.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">4</div><div style="flex:1;min-width:0"><div class="mn2">Your physical space</div><div class="mfocus">Clear desk and screen</div><div class="mdesc">How to protect information in your immediate environment. Clear desk and screen policies, secure printing, disposal, visitor management and shoulder surfing awareness.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">5</div><div style="flex:1;min-width:0"><div class="mn2">Digital and comms hygiene</div><div class="mfocus">Email, messaging and metadata</div><div class="mdesc">Avoiding common digital risks: wrong recipients, forwarding confidential content, messaging app oversharing, screenshot culture and hidden data in everyday files.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">6</div><div style="flex:1;min-width:0"><div class="mn2">The insider threat</div><div class="mfocus">Internal risks and reporting</div><div class="mdesc">Threats do not only come from outside. Accidental oversharing, access misuse, recognising unusual behaviour in colleagues and how to raise a concern without conflict.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+      <div class="mi" onclick="tm(this)"><div class="mnum">7</div><div style="flex:1;min-width:0"><div class="mn2">When to say no</div><div class="mfocus">Escalation protocols</div><div class="mdesc">The confidence and language to decline an information request you are not authorised to fulfil. Escalation paths, who to contact, how to document and what to do after.</div></div><i class="ti ti-chevron-down mchev"></i></div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">Click any module to expand</span><span class="bb-b">Slide 4 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 5: TACTICS -->
+<div class="slide content" id="s4">
+  <div class="sbody">
+    <div class="s-eye">Module 3 spotlight</div>
+    <div class="s-title">The six manipulation tactics to know</div>
+    <div class="s-rule"></div>
+    <div class="s-text" style="margin-bottom:12px">Social engineers use a repeatable set of psychological techniques. Knowing their names is your first line of defence.</div>
+    <div class="tgrid">
+      <div class="tc red"><div class="tn">Urgency</div><div class="td">Artificial time pressure to stop you thinking clearly. "I need this in ten minutes."</div></div>
+      <div class="tc wa"><div class="tn">Authority</div><div class="td">Impersonates someone powerful to make refusal feel risky. "This is the Director's office."</div></div>
+      <div class="tc pur"><div class="tn">Social proof</div><div class="td">Claims others already complied. "Everyone else on your team confirmed this."</div></div>
+      <div class="tc bl2"><div class="tn">Flattery</div><div class="td">Warmth and compliments to lower your guard. "You have always been so helpful."</div></div>
+      <div class="tc red"><div class="tn">Fear</div><div class="td">Threatens negative outcomes for non-compliance. "You will be asked why you refused."</div></div>
+      <div class="tc gn2"><div class="tn">Reciprocity</div><div class="td">Does something small first, then calls in a favour. "I sent you that report last month."</div></div>
+    </div>
+    <div class="callout gold" style="margin-top:14px;margin-bottom:0">
+      <div class="c-lbl">The universal response</div>
+      <div class="c-body">Whatever tactic is used, your response is the same. Acknowledge, pause, tell them you will follow up, end the interaction and consult your manager before taking any action.</div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">CLET Information Security Awareness Training</span><span class="bb-b">Slide 5 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 6: VERIFICATION -->
+<div class="slide content" id="s5">
+  <div class="sbody">
+    <div class="s-eye">Module 2 spotlight</div>
+    <div class="s-title">The four-step verification framework</div>
+    <div class="s-rule"></div>
+    <div class="s-text" style="margin-bottom:14px">Use this framework every time someone requests information, access or action on behalf of an external or unfamiliar party.</div>
+    <div class="scol">
+      <div class="si"><div class="snum bl">1</div><div><div class="st">Pause</div><div class="sd">Do not respond to the request immediately. Acknowledge you heard them, then pause before taking any action whatsoever.</div></div></div>
+      <div class="si"><div class="snum gd">2</div><div><div class="st">Question</div><div class="sd">Ask for their full name, organisation, role and a direct contact number or official email address. Write it down.</div></div></div>
+      <div class="si"><div class="snum gn">3</div><div><div class="st">Verify independently</div><div class="sd">Look up the organisation through official sources. Call back on a number you find yourself, never one they gave you.</div></div></div>
+      <div class="si"><div class="snum rd">4</div><div><div class="st">Escalate if unsure</div><div class="sd">If you cannot verify, do not share. Tell them you will follow up and immediately notify your line manager or security team.</div></div></div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">CLET Information Security Awareness Training</span><span class="bb-b">Slide 6 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 7: EXPECTATIONS -->
+<div class="slide content" id="s6">
+  <div class="sbody">
+    <div class="s-eye">Staff expectations</div>
+    <div class="s-title">What is required from every member of staff</div>
+    <div class="s-rule"></div>
+    <div class="explist">
+      <div class="ei"><div class="edot">1</div><div class="etx">All seven modules and the final assessment must be completed within the timelines communicated by your line manager.</div></div>
+      <div class="ei"><div class="edot">2</div><div class="etx">A minimum score of 3 out of 5 is required to pass each module quiz. Failed modules can be retaken after reviewing the core knowledge section.</div></div>
+      <div class="ei"><div class="edot">3</div><div class="etx">A certificate of completion will be issued and recorded in your staff training file upon passing the final assessment.</div></div>
+      <div class="ei"><div class="edot">4</div><div class="etx">Managers are responsible for confirming completion within their teams and reporting any staff who require additional support.</div></div>
+      <div class="ei"><div class="edot">5</div><div class="etx">If you encounter a real information request before completing the training, pause, do not share and escalate to your line manager immediately.</div></div>
+    </div>
+    <div class="callout green" style="margin-top:11px;margin-bottom:0">
+      <div class="c-lbl">Questions and support</div>
+      <div class="c-body">Contact your line manager or the designated Information Security lead at any time. Do not attempt to handle sensitive requests alone if you are uncertain.</div>
+    </div>
+  </div>
+  <div class="bbar"><span class="bb-l">CLET Information Security Awareness Training</span><span class="bb-b">Slide 7 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+<!-- SLIDE 8: CLOSER -->
+<div class="slide closer" id="s7">
+  <div class="sbody">
+    <div class="cl-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAYAAADFeBvrAAAQ2UlEQVR42s2aeXgW1b3HP785877ZXrIRICRkYZc9EERQURGt6221br1W7WZb7a3Wbl7b3ra4tbWttmq9UtoqLrUVnlbrUquoBRXBQkARRcEQQ9gSQhKyv+/Mmd/9w/Ni5AYUxD6e55lnZs7MnDnf33Z+53uO8BEUVfUAcYfu8zhdp4CKiPJxLKrqqar5d323vyKHAYgREdvnPgGMtdaONMYMAQYAaY2FQBfQHARBXSwWe0NEWvfX1r8VkKoKQNpkVPUEYBaQY61tMsZsBuo7OzsbE4mEABbIBIqAgdbaMcaYUmttYIxZDTwjIr1prYlI9G8D1FeSqnoWcAKwFVgCrOsDshgYAawBBgI9ItKiqgVpzahqJXAaMAFYBTwgIsGhaksOFYyqToii6Cue59UBfxaRnennwK+AZUCZ+2wwUO/+l+/M7lEgB2gSkV3u2y8B04IgeDAejz/ngstBBQ7vYB1YRGwYhhcBXwuCYL6I/FpEdoZh+BlnghYwwGig1XX6MSAOBEAz0BIEQQWwEJiqqmep6rki8gfgBmPMmap6lYhEIqJp8z6sGkrbtape4zr+M1f/ZWtttjHGRlE02PO83zl/iYlI/X7aGpZKpYri8fg4oAUYBzQ6k3zYvXNpFEVjPc/7vjNB+SCakoM0sx8BO0VkgaqeDmwDqoGTgHuATSKy2Ul0EnA0MMqZHEAbsBl4EahxbRpgivOxmc4c14nI06r6H67t7zghva/5+QcB5qo0mK6urlJrbbUxZqgzqUtEJGxs7Cy21t5orT3fGDPqQO2GYbjdWvtoKpW6IyMjY42qDrTWlhhjMoEpqrpBRB5VVQtcLyLXOPD2Q40x7nyGqs5z119X1StV9TRV/aqqiqqaIAiuU9V2fbdEqhrs57B93gsCa+c3NmrCtX+R+8diVZ2QDhaqelnfPh3SOKOq0tXVVaKqd6pq3NUfaa193JkcqlqpqitUVTfXbdGlz60Ilq9YZf/7hz+Nnnx6maZSKY2iaO+xquYV/fENt+gjjy+JVq5aE6xesy4N7K1UKnWka3Oqqj6iqteoaszV/UJVp/ZJrQ46ynkiotnZ2ZcD84EoDMMrgGzP8+4Enkomk5OA54GZ69ZvCO6690F9Y2Otf/X//NTLysyUmTOmYYzpKyQmjh9DRXkp8278laxa/Yr/l4f/rstXrAqCIBwZi8WW9vT0nCIia4FfAj8XkQCgq6vrZuAL76cheZ+IVm2tPcP3/eucpCqAi4GbOjs7E4lEYhVQfu1Pfh1Wlpf6AwcW8Nzyf5E7IMG3rvgy2dlZhGGIMQYR2XsdRREL719MzdpXmXPcLPV9X5avWG1/9P2rTO6ARFcqlTrO+ZXpI9xAVS8FmkXk4f0NvHKgQGCtvcHzvLtFpLafd55OpYK5jz2xJHy7fptfWlpMw9btTJpwBFWTx1M0cCDGeO/Rjsi7v2tt28O69Rt4+ZXXKCoqpKWljYL8fHvS3NmmeHDRW5s27a4ePXqgAb4FjAe+ATRHUfQzz/O+A9j+Ip7fn++4qDbcRZTNqnoF0OtG98ZUKnUpMPf+P/01aNzVHDtm1nQeeXwJp8w9npPnzgYglQrYVFvHM0uXs3HTZnbsbKJq0nhOOH4Wk8aPpSA/j+OPnUlBfh73PvAX5hx3NE27ms3//vae4LoffnvU8OF514rIN1V1JZByAHpVtTYIglnxePz5/nK+/nzIAFhr5zj/yHQD3wmA19zcnIjH4/O2NGzTnJwsk5eb0If+9g8uv/QiTp47mzC0RFFEZ1cXP7/lTt588y06Ojp5adVa7rr3QW694y5qN9ejqoRhyOSJ4/jR965i2fMraWvbo2NGDfdf27Ax8n3/8u7u7gpgOdAD3KqqGcCznucdsz8L6w9QBGCMGQHUOL/ZBtwlItsTicQ5QMnt8xdGOTnZXkZGhnxi7nGMHFGJtRbfN3ieR+6ABCeecAz5+Xn4vs+5Z5/OjOlVfP2rn6NqygSiKML3fay15A5IcN6nz8DzPCkvK5HfzF8YARlZWVn/JSJtQJObelQAbxhj8lU1oz8f8voxt0hVC4BIRFqttZ8CdqXNMzMz86JkKtCiwgLdsnU7m99u4LhjjyKKIjzPI1LFWktbWzvd3d30JpMse34lzyxdzo7GJkpLilFVoigiihRjDNZGVE+dRG8yxcuvbqBk6BBv+84mgHMWLVpkgHVOuEc7ELuBkX2nMfvTUPphBdCiqmKM2eTSkvUbN27MBab//clnpbAw33S0d3LCsUeRk5ONy+/wRDDGsKOxiTUvr+fYWUcy7ohR5GRn8cWLz2fHzkZAiMVieJ68+53nceapc2ltbWN4RZk88thTCow47hOfqAA6nemXq2pOGIab3bTk/2Hw9wOoBKjv6uoqzsnJGQMsEpFt3d2pWUBeZ0enbmnYLj29vQwZMshJXPE8WLd+Aw8/+iSlJcUcM3M6M6ZXUbu5ntq6es44dS5P//MFfr/wAZqbW5hePYWTT5yNaoSqx6BBhbR3dFLfsE2MMSHgFyUSs4A/OytJAT2+7+8Ghh9MLpcbhuHunJwcC5QDZ6rqbcCwKFKGlQ6N2js6TRRFjB413En4XWnvam7hCxefT9mwEgCmTZ3I0OLBFBbmc/45Z7K7pY1bbl9AGIbv+WnRwEKOrJ5C3dsNTJ82mc6uHhI5WZXOzBb0cY09QOJgMoWY7/siIk0i8jXgNy7mJ0SEPz74sA4rHcrullaSydReIAC5AxJ7wQRBiKoSj8fJzMxAFVKpFAML87n4M5+msmIYqornvdONSJXazfVMmjCWBx58aK9w+2GUevenjH4rrbVqjEk7nOlDRVkR+PQnT2X12nWMGlFJPB7bO2iG1pKREads2FDa9rSTn5e7d1CNoggRiMfjdHV3U1iYj6qSTKbIzMwgihSNIqZOmchLq9Zw0pzZJHKy9kZdVZ1rrZ0KvABs358y+q00xnQD2U4rxuVQXhiGTQB19Q0ycfxY6uobaGxsRkSIooiaNevYum0nGzdtZsVLNdRv2bbXMdNa2N3SytLnVrLxrToatu6g5uVXSSZTeJ5gbcRLq9YwY3oVW7ZuT0uxKZ1cGGN2uvlSAkh+EA2lNdEKlKlqJnCZtXaAMcZ0d3fX5ebmRuOPGG2WPr9C83JzBXSvBp54aimral5haPFgplVNZPq0yagqqSAgmUqhqmTE47S0tvH4P56hYdsOKspKmTBuDLFYjI6OToYWD6Fm7auMHjVcBEgmk5tcn86y1obGmIfcRLDtg2goDWgbUOyk0GqM6Wptbc1es2ZNLdAw7ogxZGdna2XFMP5w74OICL7vk5c3gKop45kwbgyjRlai+o5vrVv/BstXrEZEsNZSWTGMcUeMprpqIoOKCon5Pp4n/HHRw2RlZpA7IKFjR480QDIMw9WqWgRkGGPKXDpW6vrIvszsewD1Sfa2APnuvhZ4rKCg4MQ5c+aEwLNFA/NVhKh2c70WDx5Ew9btXP2DG9nwxlvE/BjdPT2s/Nda7rl/Ma9t2IgnQizm8/aWrdx93yL+uexF9uxpR0TY3dLKVVdfS+3megYXDaRxV7N2dnXb4ZVlCqxOJBI7gUpr7TbgB467Gw5s6g+Qv59MuzcMw17Hqw0AjgQaVVV6enoWZmVlfeHM006S1TWvSGVFGTfftoArL/8imZkZZGZmAJBMpmhv72BPewdTJo/XiePHsmvXbjnpxNkU5OeRmZmBiNDb24u1EfN/fz8zZ0xlRGW5DB06hIL8PLHW3uW6NcoYczawQlVbgCxgW3/EyX45BWNMDXAKcK+1tsIYMxYouummm16YN2/esvJhJccvvG+RbdrVbIoHD2LFSzVceMFZ75kiDC0e/IHImEf+voSsrEzq6hv0zY2b9epvXmaA+sbGxj+r6hBHtFzptHI8UOfoLd/leO/P+qjqAGCeiHxbVU8EbgC+JyLLurpS1dnZsX8FQRjd88fFJiMjLm/XbyUzM4MLzz+L0pJiF/4j4J18TRWi6N17gD17OvjrI0/w2oaNzJhexfYdjXzus+cGBfl5MWvtBb7vL1LVucBkB+JhVb2+t7d3YVZWVm1/GvIOMMHrAOpVdTbwEvAcUKWqY3Jy4jVBEMyLxXx/wrgxwZJnnmfE8HLKy0r5+a/ms+yFlTQ27cIYz4FRVKO99x0dnax4qYZf/Ho+PT29nDB7pj7x5D8pKx0aFOTnxYIwvN+BKQMuAKYBS1R1BIADY/qb4MmBiHigKIqiH3ued6ULlROBEhGZ5wbg+zzPu6h5d0uw4K4H/D172qW8rJRBgwayumYd06sn09ub5JILzwHgyaeX0djUzNv1WyktGYKIaN3bDRIEIV/6/AXB6JHDY1EUveB53qnO2c8FpoVh+FgsFntaVX8C/ElEXt0foS/vx8eFYfh5Y0wE3Aec58L5Njd7tWEY3uX7/iUtrW26fMUq27Rrt1+/ZRvFQwbpoKJCnn9xlXzyjJMZVFTI7+5+gFlHVdPd1aPbdzbKwMICSkuK7bSqSVJRXuoF1j4bM+ZcEWkNgmCu7/uTXFbwN2CWtfYY3/dvPBCRLx+Al9Moim71PO821/hlbrROisjdjjS82hhzHZBRv2WrvrzudWuM59WsXS++8Rg7dhSJnGzWvrKerq4ejqyerNZG0dgxI70J48Z4AO4f33TOfhbwn8Cu1tbWHxQUFFjgFuC7QMchr/ylTa+7u7tcVf9QV1eXqapzVPWHqnp8GIafdYMeyWSyKgztQ45gVFXV1WvW6Xe+d33U1dGpqqrzrr9Zn3rmOQ3Dd3lGa+3SIAhOdP8bpKpXqeo3VPXGtM9Ya29V1Rnvx8kdzHopqjrLWnsHQHt7e1EQBKc7YMf25cqSyeS0ZDK4SVVrGrZu73j9jU3q2NJk7a7m7g1vbOpR1deCILijO5U6vq81qOpJjiX9nouyqOr1qnreh2JND0AJn2StvVNV81R1hqqe59ZIxZ33ndKXqmp1w4233r3zK9e83nLtLQtUtXLReeeZfRha00dwR7m2RVV/Gobh51y9z+EsaVCpVOpoVV2gqqP2fdZnEdhfxDudfiGz8ruvZ5VFG/NK9M3scl1ZNO6XALpoUbyf79Kgiqy1d6jq2YdVMwfQVJmq3q6qVzhqqa/ZeKqIguiOe3P0yeGt+uzQHn2o4nZdUtyqT5aHHW9dNPgdUOeZfTurqhdaaxeoatWhgDkoNToC0hORBuCKMAwvMcbcrKrLgMdFpPs9vvfaYlmRmW2terFXydkzwe/0YiZDJ0YFCiDnL7YgaT89OYqi04Faz/OuEJHkoayzHuqi8d4VcFUtdOPTWLeYtRLYICJdAJx95GcZGPstsTCHwCTZw9UsXnHbi1u2ZFUPKRsVjzPDEZk7gMUisuXDrITLhzXBPqvhGWEYzvJ9vwooBAJrbbsxpulPq56avX7XtmlHFBbXXjzztGXAIEdLtYdhuN73/eUi0n449iocjo0X4lYH7D71Q4HikLDQxw8cBaVBEESxWGwnsENEwn38M/pYbZU5lG0u6bD/sdkac4DBeFCfjL7vJqbIXYu7bvmw22EOeZ/CwWByE690SLcuoqbPGe7fGYdbqN5HoB0BjLX2FDe7VGCKC/Unu/lNL3A5UC0i4eE0Oe8jAAOQa4w5DnjNbVb6lKoOcpubhtfU1LS5ILGFj3tJg3Ir2eeqqq+qn1HVCe440z0f5baiHdbyUQUFAxQ4p0+45ZAMZ34WyHYa8vcN3x+2+B+RotKRzDgwxgFIm3m7OyfT3PXhKv8HNpPoAFjDXUoAAAAASUVORK5CYII=" alt="CLET seal"></div>
+    <div class="cl-title">The one principle to carry with you</div>
+    <div class="cl-rule"></div>
+    <div class="cl-box">
+      <div class="cl-lbl">Before the training begins</div>
+      <div class="cl-body">If you are ever unsure whether to share information with someone, the answer is always to pause and check before you act. Legitimate requests can always wait for a proper verification process. Pressure to act quickly, without verification, is itself a warning sign. You have both the right and the responsibility to slow down.</div>
+    </div>
+    <div class="cl-meta">Council for Legal Education and Training &nbsp;&bull;&nbsp; Information Security and Governance &nbsp;&bull;&nbsp; June 2025</div>
+  </div>
+  <div class="bbar"><span class="bb-l">Classification: Internal &mdash; Do not share outside CLET without authorisation</span><span class="bb-b">Slide 8 of 8</span></div>
+  <div class="adinkra"></div>
+</div>
+
+</div>
+<script>
+var c=0,t=8;
+function gs(n){
+  document.getElementById('s'+c).classList.remove('active');
+  document.getElementById('d'+c).classList.remove('active');
+  c=n;
+  document.getElementById('s'+c).classList.add('active');
+  document.getElementById('d'+c).classList.add('active');
+  document.getElementById('ctr').textContent=(c+1)+' / '+t;
+  document.getElementById('pb').disabled=c===0;
+  document.getElementById('nb').disabled=c===t-1;
+}
+function go(d){var n=c+d;if(n>=0&&n<t)gs(n);}
+function tm(el){var o=el.classList.contains('open');document.querySelectorAll('.mi').forEach(function(i){i.classList.remove('open')});if(!o)el.classList.add('open');}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+</script>
+</body>
+</html>
